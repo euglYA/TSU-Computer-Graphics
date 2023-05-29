@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+#include "Transform.h"
 
 
 
