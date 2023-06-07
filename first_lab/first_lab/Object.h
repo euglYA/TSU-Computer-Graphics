@@ -22,6 +22,8 @@ public:
 	void translate(vec translation);
 	void scaling(float coef);
 
+	void setPosition(vec position);
+
 	void render(sf::RenderWindow& window);
 
 

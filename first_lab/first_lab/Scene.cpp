@@ -30,16 +30,7 @@ bool Scene::isOpen() {
 }
 
 void Scene::render() {
-	window->clear(sf::Color::Blue);
-	sf::RectangleShape ground(sf::Vector2f(800.f, 300.f));
-	ground.setFillColor(sf::Color(128, 64, 48));
-	ground.setPosition(0.f, 500.f);
-	//sf::RectangleShape box;
-	//box.setSize(sf::Vector2f(150, 150));
-	sf::CircleShape circle(150.f);
-	circle.setFillColor(sf::Color(1, 50, 32));
-	circle.setPosition(400.f, -50.f);
-	window->draw(ground);
+	window->clear(sf::Color::White);
 
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->render(*window);

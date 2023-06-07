@@ -11,9 +11,10 @@ Object::~Object() { }
 
 Object::Object(std::vector<std::vector<vec>> p, int r_, int g_, int b_) {
 	translation = matrix();
-	rotation = matrix();
-	scale = matrix();
-	shapes = p;
+	rotation	= matrix();
+	scale		= matrix();
+	shapes		= p;
+
 	r = r_;
 	g = g_;
 	b = b_;
@@ -21,9 +22,9 @@ Object::Object(std::vector<std::vector<vec>> p, int r_, int g_, int b_) {
 
 Object::Object(const Object& other) {
 	translation = other.translation;
-	rotation = other.rotation;
-	scale = other.scale;
-	shapes = other.shapes;
+	rotation	= other.rotation;
+	scale		= other.scale;
+	shapes		= other.shapes;
 }
 
 void Object::operator=(const Object& other) {
@@ -31,16 +32,16 @@ void Object::operator=(const Object& other) {
 		return;
 
 	translation = other.translation;
-	rotation = other.rotation;
-	scale = other.scale;
-	shapes = other.shapes;
+	rotation	= other.rotation;
+	scale		= other.scale;
+	shapes		= other.shapes;
 }
 
 Object::Object(Object&& other) noexcept {
 	translation = std::move(other.translation);
-	rotation = std::move(other.rotation);
-	scale = std::move(other.scale);
-	shapes = std::move(other.shapes);
+	rotation	= std::move(other.rotation);
+	scale		= std::move(other.scale);
+	shapes		= std::move(other.shapes);
 }
 
 void Object::operator=(Object&& other) noexcept {
@@ -48,9 +49,9 @@ void Object::operator=(Object&& other) noexcept {
 		return;
 
 	translation = other.translation;
-	rotation = other.rotation;
-	scale = other.scale;
-	shapes = other.shapes;
+	rotation	= other.rotation;
+	scale		= other.scale;
+	shapes		= other.shapes;
 }
 
 void Object::rotate(float angle) {
@@ -80,16 +81,20 @@ void Object::scaling(float coef) {
 	scale *= addition;
 }
 
-void Object::render(sf::RenderWindow& window)
-{
+void Object::setPosition(vec position) {
+	translation._matrix[0][2] = position.x;
+	translation._matrix[1][2] = position.y;
+}
+
+void Object::render(sf::RenderWindow& window) {
 	for (int i = 0; i < shapes.size(); i++) {
 		sf::ConvexShape shape;
 		shape.setPointCount(shapes[i].size());
 
 		for (int j = 0; j < shapes[i].size(); j++) {
 			vec new_point = shapes[i][j];
-			new_point = scale * new_point;
-			new_point = rotation * new_point;
+			new_point = scale		* new_point;
+			new_point = rotation	* new_point;
 			new_point = translation * new_point;
 
 			shape.setPoint(j, sf::Vector2f(new_point.x, new_point.y));
