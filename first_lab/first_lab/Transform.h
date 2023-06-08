@@ -41,8 +41,8 @@ struct matrix {
 	matrix	operator+(const matrix& other);
 	matrix	operator-(const matrix& other);
 	matrix	operator*(const matrix& other);
-	vec		operator*(const vec& other);
 	matrix	operator*(float coef);
+	vec		operator*(const vec& other);
 
 	void	operator+=(const matrix& other);
 	void	operator-=(const matrix& other);

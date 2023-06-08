@@ -9,22 +9,6 @@ Scene::~Scene() {
 		delete window;
 }
 
-void Scene::pollEvents(bool& restart) {
-	restart = false;
-
-	sf::Event event;
-
-	while (window->pollEvent(event)) {
-		
-		if (event.type == sf::Event::Closed)
-			window->close();
-	
-		if (event.type == sf::Event::KeyPressed)
-			if (event.key.code == sf::Keyboard::R)
-				restart = true;
-	}
-}
-
 bool Scene::isOpen() {
 	return window->isOpen();
 }

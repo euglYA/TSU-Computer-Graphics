@@ -8,7 +8,6 @@ public:
 	Scene();
 	~Scene();
 
-	void pollEvents(bool& restart);
 	bool isOpen();
 	void render();
 	void addObject(Object* obj);

@@ -18,12 +18,8 @@ public:
 	void operator=(const Object& other);
 	void operator=(Object&& other) noexcept;
 
-	void rotate(float angle);
 	void translate(vec translation);
-	void scaling(float coef);
-
 	void setPosition(vec position);
-
 	void render(sf::RenderWindow& window);
 
 
@@ -33,7 +29,7 @@ private:
 	int b;
 	matrix translation;
 	matrix rotation;
-	matrix scale;
+
 	std::vector<std::vector<vec>> shapes;
 };
 
