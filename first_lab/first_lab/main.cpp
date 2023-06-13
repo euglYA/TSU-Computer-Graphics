@@ -37,6 +37,7 @@ int main()
 		my_scene.render();
 
 		angle += dA;
+
 	}
 
     return 0;

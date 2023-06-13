@@ -1,8 +1,7 @@
 ﻿  main.cpp
 D:\gitHubRepos\CG_labs\CG_labs\first_lab\first_lab\main.cpp(27,19): warning C4305: инициализация: усечение из "double" в "float"
-D:\gitHubRepos\CG_labs\CG_labs\first_lab\first_lab\main.cpp(32,25): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
-D:\gitHubRepos\CG_labs\CG_labs\first_lab\first_lab\main.cpp(33,25): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
-  Object.cpp
-  Scene.cpp
-  Создание кода...
+D:\gitHubRepos\CG_labs\CG_labs\first_lab\first_lab\main.cpp(29,36): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+D:\gitHubRepos\CG_labs\CG_labs\first_lab\first_lab\main.cpp(30,36): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+D:\gitHubRepos\CG_labs\CG_labs\first_lab\first_lab\main.cpp(34,25): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+D:\gitHubRepos\CG_labs\CG_labs\first_lab\first_lab\main.cpp(35,25): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
   first_lab.vcxproj -> D:\gitHubRepos\CG_labs\CG_labs\first_lab\x64\Debug\first_lab.exe

@@ -2,8 +2,8 @@
 
 Object::Object() {
 	translation = matrix();
-	rotation = matrix();
-	shapes = std::vector<std::vector<vec>>(0);
+	rotation	= matrix();
+	shapes		= std::vector<std::vector<vec>>(0);
 }
 
 Object::~Object() { }
@@ -68,7 +68,7 @@ void Object::render(sf::RenderWindow& window) {
 
 		for (int j = 0; j < shapes[i].size(); j++) {
 			vec new_point = shapes[i][j];
-			new_point = rotation	* new_point;
+			//new_point = rotation	* new_point;
 			new_point = translation * new_point;
 
 			shape.setPoint(j, sf::Vector2f(new_point.x, new_point.y));
