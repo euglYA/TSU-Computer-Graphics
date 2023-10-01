@@ -1,85 +1,78 @@
 #include "Transform.h"
 
-vec::vec(float _x, float _y, float _z)
-	: x(_x), y(_y), z(_z)
+vector::vector(float _x, float _y)
+	: x(_x), y(_y)
 {}
 
-vec::vec(const vec& other) {
+vector::vector(const vector& other) {
 	x = other.x;
 	y = other.y;
-	z = other.z;
 }
 
-vec::vec(vec&& other) noexcept {
+vector::vector(vector&& other) noexcept {
 	x = other.x;
 	y = other.y;
-	z = other.z;
 }
 
-void vec::operator=(const vec& other) {
+void vector::operator=(const vector& other) {
 	if (this == &other)
 		return;
 
 	x = other.x;
 	y = other.y;
-	z = other.z;
 }
 
-void vec::operator=(vec&& other) noexcept {
+void vector::operator=(vector&& other) noexcept {
 	if (this == &other)
 		return;
 
 	x = other.x;
 	y = other.y;
-	z = other.z;
 }
 
-void vec::normalize() {
+void vector::normalize() {
 	float inv_len = 1.0f / this->length();
 	(*this) *= inv_len;
 }
 
-float vec::length() const {
-	return sqrtf(x * x + y * y + z * z);
+float vector::length() const {
+	return sqrtf(x * x + y * y);
 }
 
-vec vec::operator+(const vec& other) {
-	vec vec(*this);
+vector vector::operator+(const vector& other) {
+	vector vec(*this);
 	vec += other;
 
 	return vec;
 }
 
-vec vec::operator-(const vec& other) {
-	vec vec(*this);
+vector vector::operator-(const vector& other) {
+	vector vec(*this);
 	vec -= other;
 
 	return vec;
 }
 
-vec vec::operator*(float coef) {
-	vec vec(*this);
+vector vector::operator*(float coef) {
+	vector vec(*this);
 	vec *= coef;
 
 	return vec;
 }
 
-void vec::operator+=(const vec& other) {
+void vector::operator+=(const vector& other) {
 	x += other.x;
 	y += other.y;
-	z += other.z;
 }
 
-void vec::operator-=(const vec& other) {
+void vector::operator-=(const vector& other) {
 	x -= other.x;
 	y -= other.y;
-	z -= other.z;
 }
 
-void vec::operator*=(float coef) {
+void vector::operator*=(float coef) {
 	x *= coef;
 	y *= coef;
-	z *= coef;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -161,12 +154,11 @@ matrix matrix::operator*(const matrix& other) {
 	return new_mat;
 }
 
-vec matrix::operator*(const vec& other) {
-	vec ans;
+vector matrix::operator*(const vector& other) {
+	vector ans;
 
-	ans.x = _matrix[0][0] * other.x + _matrix[0][1] * other.y + _matrix[0][2] * other.z;
-	ans.y = _matrix[1][0] * other.x + _matrix[1][1] * other.y + _matrix[1][2] * other.z;
-	ans.z = _matrix[2][0] * other.x + _matrix[2][1] * other.y + _matrix[2][2] * other.z;
+	ans.x = _matrix[0][0] * other.x + _matrix[0][1] * other.y + _matrix[0][2];
+	ans.y = _matrix[1][0] * other.x + _matrix[1][1] * other.y + _matrix[1][2];
 
 	return ans;
 }
