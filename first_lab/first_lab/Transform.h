@@ -2,11 +2,14 @@
 #include <cmath>
 #include <utility>
 
+#define PI 3.14159265
+
 struct vector {
 	float x;
 	float y;
+	float z;
 
-	vector(float _x = 0, float _y = 0);
+	vector(float _x = 0, float _y = 0, float _z = 0);
 	vector(const vector& other);
 	vector(vector&& other) noexcept;
 
@@ -40,10 +43,18 @@ struct matrix {
 	matrix	operator-(const matrix& other);
 	matrix	operator*(const matrix& other);
 	matrix	operator*(float coef);
+	matrix	getPerspective(float aspect, float FOV, float near, float far);
+	matrix	getOrtographic(float aspect, float width, float height, float near, float far);
 	vector	operator*(const vector& other);
 
 	void	operator+=(const matrix& other);
 	void	operator-=(const matrix& other);
 	void	operator*=(const matrix& other);
 	void	operator*=(float coef);
+
+	static void initViewMatrix();
+	static void initProjMatrix(float aspect, float FOV);
+
+	static matrix viewMatrix;
+	static matrix projMatrix;
 };

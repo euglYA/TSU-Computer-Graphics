@@ -2,67 +2,63 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <windows.h>
-#include "Figure.h"
+#include "mesh.h"
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(800, 800), "help me", sf::Style::Default);
+	int width = 800, height = 800;
 
-	std::vector<std::vector<vector>> figureParts;
-	std::vector<vector> points;
+	sf::RenderWindow window(sf::VideoMode(width, height), "help me", sf::Style::Default);
+	window.setVerticalSyncEnabled(true); 
+	window.setFramerateLimit(120);
 
-	points.push_back(vector(0, 0));
-	points.push_back(vector(-40, 25));
-	points.push_back(vector(40, 25));
-	figureParts.push_back(points);
-	points.clear();
-	points.push_back(vector(40, 25));
-	points.push_back(vector(-40, 25));
-	points.push_back(vector(-40, 75));
-	points.push_back(vector(40, 75));
-	figureParts.push_back(points);
-	points.clear();
+	matrix::initViewMatrix();
+	matrix::initProjMatrix(width * 1.0f / height, 60);
 
-	Figure box(figureParts, 0, 0, 0);
-	points.clear();
-	figureParts.clear();
-	points.push_back(vector(2, 153));
-	points.push_back(vector(-2, 153));
-	points.push_back(vector(-2, 0));
-	points.push_back(vector(2, 0));
-	figureParts.push_back(points);
+	std::vector<std::vector<vector>> triangles;
 
-	Figure stick(figureParts, 0, 0, 0);
-	
-	box.setPosition(vector(375, 500));
-	stick.setPosition(vector(375, 400));
+	std::vector<vector> points{ { 3,  1,  2},
+								{ 3,  1, -2},
+								{ 3, -1,  2}, 
+								{ 3, -1, -2}, 
+								{-3,  1,  2}, 
+								{-3,  1, -2}, 
+								{-3, -1,  2},
+								{-3, -1, -2}};
 
-	float x, y;
-	float angle = 90;
-	float dA = -0.005;
-	float r = 150;
+	triangles.push_back({ points[0], points[1], points[3] });
+	triangles.push_back({ points[0], points[2], points[3] });
+	triangles.push_back({ points[0], points[5], points[1] });
+	triangles.push_back({ points[0], points[5], points[4] });
+	triangles.push_back({ points[1], points[3], points[7] });
+	triangles.push_back({ points[1], points[5], points[7] });
+	triangles.push_back({ points[5], points[4], points[6] });
+	triangles.push_back({ points[5], points[7], points[6] });
+	triangles.push_back({ points[2], points[3], points[6] });
+	triangles.push_back({ points[3], points[7], points[6] });
+	triangles.push_back({ points[0], points[2], points[6] });
+	triangles.push_back({ points[0], points[4], points[6] });
+
+	Mesh box(triangles, 255, 0, 0);
+
+	float dA = 0.5;
 
 	while (1) {
+		sf::Event event;
+		window.pollEvent(event);
+
+		if (event.type == sf::Event::EventType::Closed)
+		{
+			window.close();
+			break;
+		}
+
 		window.clear(sf::Color::White);
 
-		x = cosf(angle * 3.14 / 180) * r + 375;
-		y = sinf(angle * 3.14 / 180) * r + 400;
+		box.rotate(dA);
 
-		vector offset = vector(x, y) - box.getPosition();
+		box.draw(window, width, height);
 
-		std::cout << offset.x << " " << offset.y << std::endl;
-
-		box.translate(offset);
-
-		//box.setPosition(vector(x + 375, y + 400));
-		box.rotate(-dA);
-		stick.rotate(-dA);
-
-		angle += dA;
-
-		box.draw(window);
-		stick.draw(window);
 		window.display();
-		//Sleep(500);
 	}
 
     return 0;
