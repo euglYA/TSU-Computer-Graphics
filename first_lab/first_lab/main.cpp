@@ -40,8 +40,8 @@ int main() {
 
 	Mesh box(triangles, 255, 0, 0);
 
-	float dA = 0.5;
-
+	float start_angle = 0;
+	float dA = 0.05;
 	while (1) {
 		sf::Event event;
 		window.pollEvent(event);
@@ -54,7 +54,10 @@ int main() {
 
 		window.clear(sf::Color::White);
 
-		box.rotate(dA);
+		if (start_angle <= 30) {
+			box.rotate(dA);
+			start_angle += dA;
+		}
 
 		box.draw(window, width, height);
 

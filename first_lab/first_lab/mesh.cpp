@@ -77,22 +77,18 @@ void Mesh::draw(sf::RenderWindow& window, int width, int height) {
 	}
 
 
-	for (int i = 0; i < clipSpaceTriangles.size(); i++)
-	{
-		sf::Vertex line1[] =
-		{
+	for (int i = 0; i < clipSpaceTriangles.size(); i++) {
+		sf::Vertex line1[] = {
 			sf::Vertex(sf::Vector2f(clipSpaceTriangles[i][0].x, clipSpaceTriangles[i][0].y), sf::Color(r, g, b, 255)),
 			sf::Vertex(sf::Vector2f(clipSpaceTriangles[i][1].x, clipSpaceTriangles[i][1].y), sf::Color(r, g, b, 255))
 		};
 
-		sf::Vertex line2[] =
-		{
+		sf::Vertex line2[] = {
 			sf::Vertex(sf::Vector2f(clipSpaceTriangles[i][1].x, clipSpaceTriangles[i][1].y), sf::Color(r, g, b, 255)),
 			sf::Vertex(sf::Vector2f(clipSpaceTriangles[i][2].x, clipSpaceTriangles[i][2].y), sf::Color(r, g, b, 255))
 		};
 
-		sf::Vertex line3[] =
-		{
+		sf::Vertex line3[] = {
 			sf::Vertex(sf::Vector2f(clipSpaceTriangles[i][2].x, clipSpaceTriangles[i][2].y), sf::Color(r, g, b, 255)),
 			sf::Vertex(sf::Vector2f(clipSpaceTriangles[i][0].x, clipSpaceTriangles[i][0].y), sf::Color(r, g, b, 255))
 		};
