@@ -223,9 +223,9 @@ void matrix::operator*=(float coef) {
 }
 
 void matrix::initViewMatrix() {
-	viewMatrix._matrix[0][0] = 0.707;	viewMatrix._matrix[0][1] = 0;	viewMatrix._matrix[0][2] = -0.7068;		viewMatrix._matrix[0][3] = 0.0056;
+	viewMatrix._matrix[0][0] = 0.707;	viewMatrix._matrix[0][1] = 0;	viewMatrix._matrix[0][2] = -0.707;		viewMatrix._matrix[0][3] = 0;
 	viewMatrix._matrix[1][0] = 0;		viewMatrix._matrix[1][1] = 1;	viewMatrix._matrix[1][2] = 0;			viewMatrix._matrix[1][3] = 0;
-	viewMatrix._matrix[2][0] = 0.7068;	viewMatrix._matrix[2][1] = 0;	viewMatrix._matrix[2][2] = 0.707;		viewMatrix._matrix[2][3] = 14.14;
+	viewMatrix._matrix[2][0] = 0.707;	viewMatrix._matrix[2][1] = 0;	viewMatrix._matrix[2][2] = 0.707;		viewMatrix._matrix[2][3] = 10;
 	viewMatrix._matrix[3][0] = 0;		viewMatrix._matrix[3][1] = 0;	viewMatrix._matrix[3][2] = 0;			viewMatrix._matrix[3][3] = 1;
 }
 
