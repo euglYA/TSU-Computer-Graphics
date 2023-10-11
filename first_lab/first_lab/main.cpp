@@ -41,7 +41,7 @@ int main() {
 	Mesh box(triangles, 255, 0, 0);
 
 	float start_angle = 0;
-	float dA = 0.05;
+	float dA = 0.075;
 	while (1) {
 		sf::Event event;
 		window.pollEvent(event);

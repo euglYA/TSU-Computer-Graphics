@@ -20,11 +20,13 @@ public:
 
 	void rotate(float angle);
 	void draw(sf::RenderWindow& window, int width, int height);
-
+	void getW(std::vector<std::vector<vector>> triangles);
 
 private:
 	int r; int g; int b;
 	matrix transform;
-
 	std::vector<std::vector<vector>> triangles;
+	float** W;
+	vector weightCenter;
+	vector viewPoint;
 };
