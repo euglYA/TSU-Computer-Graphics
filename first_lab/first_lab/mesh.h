@@ -21,6 +21,7 @@ public:
 	void rotate(float angle);
 	void draw(sf::RenderWindow& window, int width, int height);
 	void getW(std::vector<std::vector<vector>> triangles);
+	void getW_sec(std::vector<std::vector<vector>> triangles);
 
 private:
 	int r; int g; int b;

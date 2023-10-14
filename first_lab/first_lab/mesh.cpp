@@ -2,14 +2,14 @@
 
 Mesh::Mesh() {
 	transform	= matrix();
-	triangles		= std::vector<std::vector<vector>>(0);
+	triangles	= std::vector<std::vector<vector>>(0);
 }
 
 Mesh::~Mesh() { }
 
 Mesh::Mesh(std::vector<std::vector<vector>> p, int r_, int g_, int b_) {
 	transform	= matrix();
-	triangles		= p;
+	triangles	= p;
 	viewPoint.x = 10;
 	viewPoint.y = 10;
 	viewPoint.z = 0;
@@ -17,7 +17,6 @@ Mesh::Mesh(std::vector<std::vector<vector>> p, int r_, int g_, int b_) {
 	r = r_;
 	g = g_;
 	b = b_;
-	const int size_ = p.size();
 
 	W = new float*[12];
 	for (int i = 0; i < 12; i++) {
@@ -28,7 +27,7 @@ Mesh::Mesh(std::vector<std::vector<vector>> p, int r_, int g_, int b_) {
 
 Mesh::Mesh(const Mesh& other) {
 	transform	= other.transform;
-	triangles		= other.triangles;
+	triangles	= other.triangles;
 }
 
 void Mesh::operator=(const Mesh& other) {
@@ -36,12 +35,12 @@ void Mesh::operator=(const Mesh& other) {
 		return;
 
 	transform	= other.transform;
-	triangles		= other.triangles;
+	triangles	= other.triangles;
 }
 
 Mesh::Mesh(Mesh&& other) noexcept {
 	transform	= std::move(other.transform);
-	triangles		= std::move(other.triangles);
+	triangles	= std::move(other.triangles);
 }
 
 void Mesh::operator=(Mesh&& other) noexcept {
@@ -49,7 +48,7 @@ void Mesh::operator=(Mesh&& other) noexcept {
 		return;
 
 	transform	= other.transform;
-	triangles = other.triangles;
+	triangles	= other.triangles;
 }
 
 void Mesh::rotate(float angle) {
@@ -59,6 +58,12 @@ void Mesh::rotate(float angle) {
 	addRotation._matrix[0][2] = sinf(radians);
 	addRotation._matrix[2][0] = -sinf(radians);
 	addRotation._matrix[2][2] = cosf(radians);
+
+	std::cout << addRotation._matrix[0][0] << " " << addRotation._matrix[0][1] << " " << addRotation._matrix[0][2] << " " << addRotation._matrix[0][3] << std::endl;
+	std::cout << addRotation._matrix[1][0] << " " << addRotation._matrix[1][1] << " " << addRotation._matrix[1][2] << " " << addRotation._matrix[1][3] << std::endl;
+	std::cout << addRotation._matrix[2][0] << " " << addRotation._matrix[2][1] << " " << addRotation._matrix[2][2] << " " << addRotation._matrix[2][3] << std::endl;
+	std::cout << addRotation._matrix[3][0] << " " << addRotation._matrix[3][1] << " " << addRotation._matrix[3][2] << " " << addRotation._matrix[3][3] << std::endl;
+	std::cout << std::endl;
 
 	transform *= addRotation;
 }
@@ -102,9 +107,9 @@ void Mesh::draw(sf::RenderWindow& window, int width, int height) {
 	
 
 	for (int i = 0; i < clipSpaceTriangles.size(); i++) {
-		auto cr = W[i][0] * viewPoint.x + W[i][1] * viewPoint.y
-			+ W[i][2] * viewPoint.z + W[i][3];
-		if (cr <= 0) {
+		auto cr = W[i][0] * viewPoint.x + W[i][1] * viewPoint.z
+			+ W[i][2] * viewPoint.y + W[i][3];
+		if (cr >= 0) {
 			continue;
 		}
 		sf::Vertex line1[] = {
@@ -129,6 +134,15 @@ void Mesh::draw(sf::RenderWindow& window, int width, int height) {
 }
 
 void Mesh::getW(std::vector<std::vector<vector>> triangles) {
+	float temp;
+	for (int i = 0; i < triangles.size(); i++) {
+		for (int j = 0; j < 3; j++) {
+			temp = triangles[i][j].z;
+			triangles[i][j].z = -triangles[i][j].y;
+			triangles[i][j].y = temp;
+		}
+	}
+
 	for (int i = 0; i < triangles.size(); i++) {
 		W[i][0] = (triangles[i][2].y - triangles[i][0].y) * (triangles[i][1].z - triangles[i][0].z)
 			- (triangles[i][1].y - triangles[i][0].y) * (triangles[i][2].z - triangles[i][0].z);
@@ -148,7 +162,7 @@ void Mesh::getW(std::vector<std::vector<vector>> triangles) {
 	weightCenter = weightCenter * (1/triangles.size());
 	for (int i = 0; i < 12; i++) {
 		if ((W[i][0] * weightCenter.x + W[i][1] * weightCenter.y
-			+ W[i][2] * weightCenter.z + W[i][3]) < 0) {
+			+ W[i][2] * -weightCenter.z + W[i][3]) < 0) {
 			W[i][0] = -W[i][0];
 			W[i][1] = -W[i][1];
 			W[i][2] = -W[i][2];
@@ -156,4 +170,34 @@ void Mesh::getW(std::vector<std::vector<vector>> triangles) {
 		}
 	}
 }
+
+void Mesh::getW_sec(std::vector<std::vector<vector>> triangles) {
+	for (int i = 0; i < triangles.size(); i++) {
+		W[i][0] = (triangles[i][2].z - triangles[i][0].z) * (triangles[i][1].y - triangles[i][0].y)
+			- (triangles[i][1].z - triangles[i][0].z) * (triangles[i][2].y - triangles[i][0].y);
+		W[i][1] = (triangles[i][1].x - triangles[i][0].x) * (triangles[i][2].y - triangles[i][0].y)
+			- (triangles[i][2].x - triangles[i][0].x) * (triangles[i][1].y - triangles[i][0].y);
+		W[i][2] = (triangles[i][2].x - triangles[i][0].x) * (triangles[i][1].z - triangles[i][0].z)
+			- (triangles[i][1].x - triangles[i][0].x) * (triangles[i][2].z - triangles[i][0].z);
+		W[i][3] = -(W[i][0] * triangles[i][0].x + W[i][1] * triangles[i][0].z + W[i][2] * triangles[i][0].y);
+	}
+	for (int i = 0; i < triangles.size(); i++) {
+		for (int j = 0; j < triangles[i].size(); j++) {
+			weightCenter.x += triangles[i][j].x;
+			weightCenter.y += triangles[i][j].y;
+			weightCenter.z += triangles[i][j].z;
+		}
+	}
+	weightCenter = weightCenter * (1 / triangles.size());
+	for (int i = 0; i < 12; i++) {
+		if ((W[i][0] * weightCenter.x + W[i][1] * weightCenter.z
+			+ W[i][2] * -weightCenter.y + W[i][3]) < 0) {
+			W[i][0] = -W[i][0];
+			W[i][1] = -W[i][1];
+			W[i][2] = -W[i][2];
+			W[i][3] = -W[i][3];
+		}
+	}
+}
+
 
