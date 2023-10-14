@@ -10,9 +10,9 @@ Mesh::~Mesh() { }
 Mesh::Mesh(std::vector<std::vector<vector>> p, int r_, int g_, int b_) {
 	transform	= matrix();
 	triangles	= p;
-	viewPoint.x = 10;
-	viewPoint.y = 10;
-	viewPoint.z = 0;
+	viewPoint.x = -10;
+	viewPoint.y =   0;
+	viewPoint.z = -10;
 
 	r = r_;
 	g = g_;
@@ -59,12 +59,6 @@ void Mesh::rotate(float angle) {
 	addRotation._matrix[2][0] = -sinf(radians);
 	addRotation._matrix[2][2] = cosf(radians);
 
-	std::cout << addRotation._matrix[0][0] << " " << addRotation._matrix[0][1] << " " << addRotation._matrix[0][2] << " " << addRotation._matrix[0][3] << std::endl;
-	std::cout << addRotation._matrix[1][0] << " " << addRotation._matrix[1][1] << " " << addRotation._matrix[1][2] << " " << addRotation._matrix[1][3] << std::endl;
-	std::cout << addRotation._matrix[2][0] << " " << addRotation._matrix[2][1] << " " << addRotation._matrix[2][2] << " " << addRotation._matrix[2][3] << std::endl;
-	std::cout << addRotation._matrix[3][0] << " " << addRotation._matrix[3][1] << " " << addRotation._matrix[3][2] << " " << addRotation._matrix[3][3] << std::endl;
-	std::cout << std::endl;
-
 	transform *= addRotation;
 }
 
@@ -104,14 +98,14 @@ void Mesh::draw(sf::RenderWindow& window, int width, int height) {
 	}
 
 	this->getW(viewSpaceTriangles);
-	
 
 	for (int i = 0; i < clipSpaceTriangles.size(); i++) {
-		auto cr = W[i][0] * viewPoint.x + W[i][1] * viewPoint.z
-			+ W[i][2] * viewPoint.y + W[i][3];
-		if (cr >= 0) {
+		auto cr = W[i][0] * viewPoint.x + W[i][1] * viewPoint.y
+			+ W[i][2] * viewPoint.z + W[i][3];
+
+		if (cr >= 0)
 			continue;
-		}
+
 		sf::Vertex line1[] = {
 			sf::Vertex(sf::Vector2f(clipSpaceTriangles[i][0].x, clipSpaceTriangles[i][0].y), sf::Color(r, g, b, 255)),
 			sf::Vertex(sf::Vector2f(clipSpaceTriangles[i][1].x, clipSpaceTriangles[i][1].y), sf::Color(r, g, b, 255))
@@ -133,36 +127,33 @@ void Mesh::draw(sf::RenderWindow& window, int width, int height) {
 	}
 }
 
-void Mesh::getW(std::vector<std::vector<vector>> triangles) {
-	float temp;
-	for (int i = 0; i < triangles.size(); i++) {
-		for (int j = 0; j < 3; j++) {
-			temp = triangles[i][j].z;
-			triangles[i][j].z = -triangles[i][j].y;
-			triangles[i][j].y = temp;
-		}
-	}
-
-	for (int i = 0; i < triangles.size(); i++) {
+void Mesh::getW(std::vector<std::vector<vector>> triangles) 
+{
+	for (int i = 0; i < triangles.size(); i++) 
+	{
 		W[i][0] = (triangles[i][2].y - triangles[i][0].y) * (triangles[i][1].z - triangles[i][0].z)
 			- (triangles[i][1].y - triangles[i][0].y) * (triangles[i][2].z - triangles[i][0].z);
+
 		W[i][1] = (triangles[i][1].x - triangles[i][0].x) * (triangles[i][2].z - triangles[i][0].z)
 			- (triangles[i][2].x - triangles[i][0].x) * (triangles[i][1].z - triangles[i][0].z);
+
 		W[i][2] = (triangles[i][2].x - triangles[i][0].x) * (triangles[i][1].y - triangles[i][0].y)
 			- (triangles[i][1].x - triangles[i][0].x) * (triangles[i][2].y - triangles[i][0].y);
+
+		vector n = { W[i][0], W[i][1], W[i][2] };
+		n.normalize();
+
+		W[i][0] = n.x;
+		W[i][1] = n.y;
+		W[i][2] = n.z;
+
 		W[i][3] = -(W[i][0] * triangles[i][0].x + W[i][1] * triangles[i][0].y + W[i][2] * triangles[i][0].z);
 	}
-	for (int i = 0; i < triangles.size(); i++) {
-		for (int j = 0; j < triangles[i].size(); j++) {
-			weightCenter.x += triangles[i][j].x;
-			weightCenter.y += triangles[i][j].y;
-			weightCenter.z += triangles[i][j].z;
-		}
-	}
-	weightCenter = weightCenter * (1/triangles.size());
-	for (int i = 0; i < 12; i++) {
-		if ((W[i][0] * weightCenter.x + W[i][1] * weightCenter.y
-			+ W[i][2] * -weightCenter.z + W[i][3]) < 0) {
+
+	for (int i = 0; i < triangles.size(); i++)
+	{
+		if (W[i][3] < 0) 
+		{
 			W[i][0] = -W[i][0];
 			W[i][1] = -W[i][1];
 			W[i][2] = -W[i][2];
