@@ -105,6 +105,7 @@ void Mesh::draw(sf::RenderWindow& window, int width, int height) {
 
 		if (cr >= 0)
 			continue;
+			
 
 		sf::Vertex line1[] = {
 			sf::Vertex(sf::Vector2f(clipSpaceTriangles[i][0].x, clipSpaceTriangles[i][0].y), sf::Color(r, g, b, 255)),
@@ -127,10 +128,8 @@ void Mesh::draw(sf::RenderWindow& window, int width, int height) {
 	}
 }
 
-void Mesh::getW(std::vector<std::vector<vector>> triangles) 
-{
-	for (int i = 0; i < triangles.size(); i++) 
-	{
+void Mesh::getW(std::vector<std::vector<vector>> triangles) {
+	for (int i = 0; i < triangles.size(); i++)  {
 		W[i][0] = (triangles[i][2].y - triangles[i][0].y) * (triangles[i][1].z - triangles[i][0].z)
 			- (triangles[i][1].y - triangles[i][0].y) * (triangles[i][2].z - triangles[i][0].z);
 
@@ -140,20 +139,11 @@ void Mesh::getW(std::vector<std::vector<vector>> triangles)
 		W[i][2] = (triangles[i][2].x - triangles[i][0].x) * (triangles[i][1].y - triangles[i][0].y)
 			- (triangles[i][1].x - triangles[i][0].x) * (triangles[i][2].y - triangles[i][0].y);
 
-		vector n = { W[i][0], W[i][1], W[i][2] };
-		n.normalize();
-
-		W[i][0] = n.x;
-		W[i][1] = n.y;
-		W[i][2] = n.z;
-
 		W[i][3] = -(W[i][0] * triangles[i][0].x + W[i][1] * triangles[i][0].y + W[i][2] * triangles[i][0].z);
 	}
 
-	for (int i = 0; i < triangles.size(); i++)
-	{
-		if (W[i][3] < 0) 
-		{
+	for (int i = 0; i < triangles.size(); i++) {
+		if (W[i][3] < 0) {
 			W[i][0] = -W[i][0];
 			W[i][1] = -W[i][1];
 			W[i][2] = -W[i][2];
@@ -161,34 +151,3 @@ void Mesh::getW(std::vector<std::vector<vector>> triangles)
 		}
 	}
 }
-
-void Mesh::getW_sec(std::vector<std::vector<vector>> triangles) {
-	for (int i = 0; i < triangles.size(); i++) {
-		W[i][0] = (triangles[i][2].z - triangles[i][0].z) * (triangles[i][1].y - triangles[i][0].y)
-			- (triangles[i][1].z - triangles[i][0].z) * (triangles[i][2].y - triangles[i][0].y);
-		W[i][1] = (triangles[i][1].x - triangles[i][0].x) * (triangles[i][2].y - triangles[i][0].y)
-			- (triangles[i][2].x - triangles[i][0].x) * (triangles[i][1].y - triangles[i][0].y);
-		W[i][2] = (triangles[i][2].x - triangles[i][0].x) * (triangles[i][1].z - triangles[i][0].z)
-			- (triangles[i][1].x - triangles[i][0].x) * (triangles[i][2].z - triangles[i][0].z);
-		W[i][3] = -(W[i][0] * triangles[i][0].x + W[i][1] * triangles[i][0].z + W[i][2] * triangles[i][0].y);
-	}
-	for (int i = 0; i < triangles.size(); i++) {
-		for (int j = 0; j < triangles[i].size(); j++) {
-			weightCenter.x += triangles[i][j].x;
-			weightCenter.y += triangles[i][j].y;
-			weightCenter.z += triangles[i][j].z;
-		}
-	}
-	weightCenter = weightCenter * (1 / triangles.size());
-	for (int i = 0; i < 12; i++) {
-		if ((W[i][0] * weightCenter.x + W[i][1] * weightCenter.z
-			+ W[i][2] * -weightCenter.y + W[i][3]) < 0) {
-			W[i][0] = -W[i][0];
-			W[i][1] = -W[i][1];
-			W[i][2] = -W[i][2];
-			W[i][3] = -W[i][3];
-		}
-	}
-}
-
-
