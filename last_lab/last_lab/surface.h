@@ -11,7 +11,7 @@ public:
 
 	void SetAngles(float roll, float pitch);
 
-	void Draw(Graphics& g);
+	void draw(Graphics& g);
 
 private:
 	const int32_t steps_ = 50;
@@ -21,5 +21,5 @@ private:
 
 	Matrix vertices_;
 
-	const Matrix Scale(const Matrix& vertices);
+	const Matrix scale(const Matrix& vertices);
 };

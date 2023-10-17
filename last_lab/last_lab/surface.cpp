@@ -65,15 +65,15 @@ void Surface::SetAngles(float roll, float pitch) {
 	rotation_ = R_y * R_x;
 }
 
-const Matrix Surface::Scale(const Matrix& vertices) {
+const Matrix Surface::scale(const Matrix& vertices) {
 	Matrix corners = corners_ * rotation_;
 
-	float norm_x = abs((*std::max_element(corners.begin(), corners.end(), 
-		[](const Row& a, const Row& b) {
+	float norm_x = abs((*std::max_element(corners.begin(), corners.end(), []
+		(const Row& a, const Row& b) {
 			return abs(a[0]) < abs(b[0]); 
 		}))[0]);
-	float norm_y = abs((*std::max_element(vertices.begin(), vertices.end(), 
-		[](const Row& a, const Row& b) {
+	float norm_y = abs((*std::max_element(vertices.begin(), vertices.end(), []
+		(const Row& a, const Row& b) {
 			return abs(a[1]) < abs(b[1]); 
 		}))[1]);
 
@@ -87,9 +87,8 @@ const Matrix Surface::Scale(const Matrix& vertices) {
 	};
 }
 
-void Surface::Draw(Graphics& g)
-{
-	Matrix vertices = Scale(vertices_ * rotation_) * Camera::projection();
+void Surface::draw(Graphics& g) {
+	Matrix vertices = scale(vertices_ * rotation_) * Camera::projection();
 
 	std::array<int, Graphics::width> upper;
 	std::array<int, Graphics::width> lower;
@@ -155,8 +154,7 @@ void Surface::Draw(Graphics& g)
 					}
 				}
 			}
-			else
-			{
+			else {
 				x0 = x1;
 				y0 = y1;
 			}
@@ -170,7 +168,6 @@ void Surface::Draw(Graphics& g)
 		lower = lower_n;
 	}
 
-	// draw horizon
 	//for (int32_t x = 0; x < Graphics::width; x++)
 	//{
 	//	g.SetPixel(x, upper[x], RGB(0, 200, 200));

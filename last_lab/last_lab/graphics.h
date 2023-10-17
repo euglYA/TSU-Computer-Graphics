@@ -12,8 +12,8 @@
 class Graphics
 {
 public:
-	static const int32_t width = 800;
-	static const int32_t height = 800;
+	static const int32_t width = 600;
+	static const int32_t height = 600;
 
 	static void Init(HWND h_window);
 	static void DeInit();
